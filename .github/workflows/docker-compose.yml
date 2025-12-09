@@ -7,7 +7,7 @@ on:
     branches: [ '**' ]
 
 jobs:
-  build:
+  docker-build-check:
     runs-on: ubuntu-latest
     
     steps:
