@@ -1,0 +1,11 @@
+<svg width="300" height="100" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="100" fill="none" />
+  
+  <path d="M20 40 L50 25 L80 40 L50 55 Z" fill="#5fb1a8" />
+  <path d="M35 48 V58 C35 58 42 63 50 63 C58 63 65 58 65 58 V48" fill="none" stroke="#5fb1a8" stroke-width="3" />
+  <line x1="80" y1="40" x2="80" y2="60" stroke="#5fb1a8" stroke-width="2" />
+  
+  <text x="95" y="58" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#5fb1a8">
+    SManager
+  </text>
+</svg>

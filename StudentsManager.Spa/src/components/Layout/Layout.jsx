@@ -3,7 +3,7 @@ import Footer from './Footer';
 
 function Layout(props) {
   return (
-    <div className="wrapper">
+    <div id="wrapper" className="wrapper">
       <Header />
       <main>{props.children}</main>
       <Footer />
