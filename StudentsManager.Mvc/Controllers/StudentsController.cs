@@ -1,4 +1,3 @@
-﻿using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using StudentsManager.Mvc.Domain.Inputs.Students;
 using StudentsManager.Mvc.Services.CourseExaminations;
@@ -40,15 +39,21 @@ namespace StudentsManager.Mvc.Controllers
             return Ok();
         }
 
-
         [HttpPatch("examination")]
         public async Task<IActionResult> SetStudentExaminationScore([FromBody] StudentExaminationScore input)
         {
             var isAuthorized = Request.Headers.TryGetValue("classified", out var authorizationHeader);
-            if (!isAuthorized) return Unauthorized();
-            if (authorizationHeader != "s3cR37") return Unauthorized();
+            if (!isAuthorized || authorizationHeader != "s3cR37") return Unauthorized();
             await examinationService.SetScoreAsync(input.UserId, input.Type, input.Score);
             return Ok();
+        }
+
+        [HttpGet("profile/{studentId}")]
+        public async Task<IActionResult> GetStudentProfileView([FromRoute] Guid studentId)
+        {
+            var result = await service.GetStudentProfileViewAsync(studentId);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
     }
 }
