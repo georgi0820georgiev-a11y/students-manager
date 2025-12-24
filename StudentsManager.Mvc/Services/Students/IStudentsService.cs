@@ -1,4 +1,4 @@
-﻿using StudentsManager.Mvc.Domain.Inputs.Students;
+using StudentsManager.Mvc.Domain.Inputs.Students;
 using StudentsManager.Mvc.Domain.Views.Students;
 
 namespace StudentsManager.Mvc.Services.Students
@@ -10,5 +10,7 @@ namespace StudentsManager.Mvc.Services.Students
         Task<StudentView?> GetByFacultyNumberAsync(string facultyNumber);
 
         Task<StudentView?> UpdatePictureAsync(UpdatePicture input);
+
+        Task<StudentProfileView?> GetStudentProfileViewAsync(Guid studentId);
     }
 }
