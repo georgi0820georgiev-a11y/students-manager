@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/students-manager-spa:latest
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/students-manager-spa
 
 jobs:
   build-push-spa:
