@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import gsap from 'gsap';
@@ -14,28 +14,24 @@ function Header() {
     const menuItemsRef = useRef([]);
     const mobileMenuButtonRef = useRef(null);
 
-    const menuItemCallbacks = useMemo(
-        () =>
-            Array.from({ length: 3 }, (_, i) => (el) => {
-                menuItemsRef.current[i] = el;
-            }),
-        []
-    );
+    const assignMenuItemRef = useCallback((index) => (el) => {
+        if (el) {
+            menuItemsRef.current[index] = el;
+        }
+    }, []);
 
     useEffect(() => {
+        const scrollLockClass = 'modal_show';
         if (isMobileMenuOpen) {
-            document.body.classList.add('no-scroll');
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
+            document.body.classList.add(scrollLockClass);
+            document.documentElement.classList.add(scrollLockClass);
         } else {
-            document.body.classList.remove('no-scroll');
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
+            document.body.classList.remove(scrollLockClass);
+            document.documentElement.classList.remove(scrollLockClass);
         }
         return () => {
-            document.body.classList.remove('no-scroll');
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
+            document.body.classList.remove(scrollLockClass);
+            document.documentElement.classList.remove(scrollLockClass);
         };
     }, [isMobileMenuOpen]);
 
@@ -117,8 +113,8 @@ function Header() {
         setIsMobileMenuOpen(false);
     }, []);
 
-    const handleLogout = useCallback(() => {
-        logout();
+    const handleLogout = useCallback(async () => {
+        await logout();
         closeMobileMenu();
     }, [logout, closeMobileMenu]);
 
@@ -167,11 +163,13 @@ function Header() {
                         <nav
                             id="main-navigation"
                             className="nav"
-                            role="navigation"
-                            aria-hidden={!isMobileMenuOpen && undefined}
+                            role={isMobileMenuOpen ? 'dialog' : 'navigation'}
+                            aria-modal={isMobileMenuOpen ? 'true' : undefined}
+                            aria-hidden={!isMobileMenuOpen}
+                            aria-label="Main navigation"
                         >
                             <ul className="menu menu-left">
-                                <li className="menu-item" ref={menuItemCallbacks[0]}>
+                                <li className="menu-item" ref={assignMenuItemRef(0)}>
                                     <Link to="/profile" className="menu-link" onClick={closeMobileMenu}>
                                         Profile
                                     </Link>
@@ -185,7 +183,7 @@ function Header() {
                             </h1>
 
                             <ul className="menu menu-right">
-                                <li className="menu-item" ref={menuItemCallbacks[1]}>
+                                <li className="menu-item" ref={assignMenuItemRef(1)}>
                                     <Link to="/slido" className="menu-link" onClick={closeMobileMenu}>
                                         Slido
                                     </Link>
@@ -193,7 +191,7 @@ function Header() {
                             </ul>
                         </nav>
 
-                        <div className="login-container" ref={menuItemCallbacks[2]}>
+                        <div className="login-container" ref={assignMenuItemRef(2)}>
                             <div className="login-container-inner">
                                 <div className="login-btn-wrap">
                                     {isLoggedIn ? (
