@@ -751,6 +751,10 @@ body.modal_show {
     overflow: hidden
 }
 
+html.modal_show {
+    overflow: hidden
+}
+
 html.mobile body.modal_show {
     overflow-x: visible
 }
