@@ -60,9 +60,9 @@ namespace StudentsManager.Mvc.Services.CourseExaminations
                 .StudentCourseExaminations
                 .SingleOrDefaultAsync(examination => examination.Id == studentExaminationId);
 
-            if (studentCourseExamination.Score == 3) return entity;
+            if (studentCourseExamination.Score == 5) return entity;
 
-            studentCourseExamination.Score = 3;
+            studentCourseExamination.Score = 5;
             _dbContext.StudentCourseExaminations.Update(studentCourseExamination);
             await _dbContext.SaveChangesAsync();
 
