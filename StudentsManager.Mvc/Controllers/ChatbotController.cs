@@ -21,12 +21,12 @@ public class ChatbotController(
 {
     private const string SystemPrompt = """
                                         You are a senior JavaScript quiz evaluator. Your task is to analyze the given quiz answers and provide:
-                                        1. A grade between 1 and 10.
+                                        1. A grade between 2 and 6.
                                         2. Overall feedback summarizing the performance.
                                         
                                         Respond in JSON format using the structure below:
                                         {
-                                          "grade": <1-10>,
+                                          "grade": <2-6>,
                                           "overallFeedback": "<summary>"
                                         }
                                         """;
