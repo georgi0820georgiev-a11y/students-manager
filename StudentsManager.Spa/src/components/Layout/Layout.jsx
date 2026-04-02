@@ -1,11 +1,11 @@
 import Header from './Header';
 import Footer from './Footer';
 
-function Layout(props) {
+function Layout({ children }) {
   return (
     <div id="wrapper" className="wrapper">
       <Header />
-      <main>{props.children}</main>
+      <main>{children}</main>
       <Footer />
     </div>
   );

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 
 import Layout from './components/Layout/Layout';
@@ -6,6 +6,9 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import SlidoPage from './pages/SlidoPage';
+import ChatbotPage from './pages/ChatbotPage';
+import ChatbotResultsPage from './pages/ChatbotResultsPage';
+import QuizPage from './pages/QuizPage';
 
 function App() {
   const { isLoggedIn } = useAuth();
@@ -13,15 +16,22 @@ function App() {
   return (
     <Layout>
       <Routes>
-        <Route path='/' element={<HomePage />} exact />
+        <Route path='/' element={<HomePage />} />
+        <Route path='/slido' element={<SlidoPage />} />
+        <Route path='/quiz' element={<QuizPage />} />
         {isLoggedIn ? (
           <>
             <Route path='/profile' element={<ProfilePage />} />
+            <Route path='/chatbot' element={<ChatbotPage />} />
+            <Route path='/chatbot/results' element={<ChatbotResultsPage />} />
+            <Route path='/login' element={<Navigate to='/' replace />} />
           </>
         ) : (
           <>
             <Route path='/login' element={<LoginPage />} />
-            <Route path='/slido' element={<SlidoPage />} />
+            <Route path='/profile' element={<Navigate to='/login' replace />} />
+            <Route path='/chatbot' element={<Navigate to='/login' replace />} />
+            <Route path='/chatbot/results' element={<Navigate to='/login' replace />} />
           </>
         )}
       </Routes>

@@ -7,20 +7,21 @@ export function useAuth() {
 }
 
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(() => sessionStorage.getItem('userId'));
+  const isLoggedIn = Boolean(userId);
 
-  const login = (userId) => {
-    sessionStorage.setItem('userId', userId);
-    setIsLoggedIn(true);
+  const login = (newUserId) => {
+    sessionStorage.setItem('userId', newUserId);
+    setUserId(newUserId);
   };
 
   const logout = () => {
     sessionStorage.removeItem('userId');
-    setIsLoggedIn(false);
+    setUserId(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userId, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

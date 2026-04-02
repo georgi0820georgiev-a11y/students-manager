@@ -13,9 +13,9 @@ function Header() {
     const menuItemsRef = useRef([]);
     const mobileMenuButtonRef = useRef(null);
 
-    const assignMenuItemRef = (index) => (el) => {
+    const assignMenuItemRef = useCallback((index) => (el) => {
         menuItemsRef.current[index] = el;
-    };
+    }, []);
 
     // Combined effect: body scroll lock, GSAP animation, focus & Escape handling for mobile menu
     useEffect(() => {
@@ -110,8 +110,8 @@ function Header() {
     const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
 
     const handleLogout = useCallback(
-        async () => {
-            await logout();
+        () => {
+            logout();
             closeMobileMenu();
         },
         [logout, closeMobileMenu]
@@ -158,15 +158,16 @@ function Header() {
                             className="nav"
                             role={isMobileMenuOpen ? 'dialog' : 'navigation'}
                             aria-modal={isMobileMenuOpen ? 'true' : undefined}
-                            aria-hidden={!isMobileMenuOpen}
                             aria-label="Main navigation"
                         >
                             <ul className="menu menu-left">
-                                <li className="menu-item" ref={assignMenuItemRef(0)}>
-                                    <Link to="/profile" className="menu-link" onClick={closeMobileMenu}>
-                                        Profile
-                                    </Link>
-                                </li>
+                                {isLoggedIn && (
+                                    <li className="menu-item" ref={assignMenuItemRef(0)}>
+                                        <Link to="/profile" className="menu-link" onClick={closeMobileMenu}>
+                                            Profile
+                                        </Link>
+                                    </li>
+                                )}
                             </ul>
 
                             <h1 className="logo">
@@ -181,10 +182,22 @@ function Header() {
                                         Slido
                                     </Link>
                                 </li>
+                                <li className="menu-item" ref={assignMenuItemRef(2)}>
+                                    <Link to="/quiz" className="menu-link" onClick={closeMobileMenu}>
+                                        Quiz
+                                    </Link>
+                                </li>
+                                {isLoggedIn && (
+                                    <li className="menu-item" ref={assignMenuItemRef(3)}>
+                                        <Link to="/chatbot" className="menu-link" onClick={closeMobileMenu}>
+                                            Chatbot
+                                        </Link>
+                                    </li>
+                                )}
                             </ul>
                         </nav>
 
-                        <div className="login-container" ref={assignMenuItemRef(2)}>
+                        <div className="login-container" ref={assignMenuItemRef(4)}>
                             <div className="login-container-inner">
                                 <div className="login-btn-wrap">
                                     {isLoggedIn ? (

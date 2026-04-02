@@ -1,0 +1,88 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Welcome! Are you ready for a practice exam ?",
+      "type": "options",
+      "options": [
+        {
+          "text": "Yes"
+        },
+        {
+          "text": "No"
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "Which of the following array methods does not modify the original array?",
+      "type": "options",
+      "options": [
+        {
+          "text": "push"
+        },
+        {
+          "text": "splice"
+        },
+        {
+          "text": "map"
+        },
+        {
+          "text": "pop"
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "What is the purpose of the let keyword?",
+      "type": "options",
+      "options": [
+        {
+          "text": "Block scope local variable"
+        },
+        {
+          "text": "Global variable"
+        },
+        {
+          "text": "Class scope variable"
+        },
+        {
+          "text": "Object scope variable"
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "What is functional programming?",
+      "type": "text"
+    },
+    {
+      "id": "q5",
+      "text": "Is JavaScript a case-sensitive language?",
+      "type": "options",
+      "options": [
+        {
+          "text": "Yes"
+        },
+        {
+          "text": "No"
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "What is the difference between == and === operators?",
+      "type": "text"
+    },
+    {
+      "id": "q7",
+      "text": "What is an IIFE (Immediately Invoked Function Expression)?",
+      "type": "text"
+    },
+    {
+      "id": "q8",
+      "text": "Thank you! Would you like to submit your answers?",
+      "type": "finish"
+    }
+  ]
+}

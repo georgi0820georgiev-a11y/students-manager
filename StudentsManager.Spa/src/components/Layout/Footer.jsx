@@ -1,8 +1,10 @@
+import { useCallback } from 'react';
+
 function Footer() {
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
   return (
     <footer className="footer">

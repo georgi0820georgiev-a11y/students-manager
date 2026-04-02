@@ -1,8 +1,7 @@
 import axios from "axios"
+import { baseUrl } from './apiConfig';
 
-const baseUrl = 'https://students-manager-dev.azurewebsites.net/api';
-
-export const Login = async (loginRequest) => {
+export const login = async (loginRequest) => {
     const response = await axios.post(`${baseUrl}/login`, loginRequest);
     return response.data;
 };

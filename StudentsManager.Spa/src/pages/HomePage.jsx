@@ -1,11 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import robotImage from '../assets/home/robot.png';
 
 function HomePage() {
-	const { isLoggedIn } = useAuth();
-	const navigate = useNavigate();
-
 	return (
 		<section className="section">
 			<div className="intro-test-section fh anim-block">

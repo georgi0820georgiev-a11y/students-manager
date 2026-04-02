@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthContext';
-import { Login } from '../services/userService';
+import { login as loginUser } from '../services/userService';
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -10,15 +10,14 @@ function LoginPage() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [fieldErrors, setFieldErrors] = useState({ email: '', password: '' });
 
-    const clearFieldError = (field) => {
+    const clearFieldError = useCallback((field) => {
         setFieldErrors((prev) => ({ ...prev, [field]: '' }));
         setError('');
-    };
+    }, []);
 
     const validateForm = () => {
         const errors = { email: '', password: '' };
@@ -48,19 +47,17 @@ function LoginPage() {
 
         setIsSubmitting(true);
         try {
-            const result = await Login({ email: email.trim(), password });
+            const result = await loginUser({ email: email.trim(), password });
 
-            const userId =
-                typeof result === 'string' || typeof result === 'number'
-                    ? result
-                    : result?.userId ?? result?.id;
+            // API returns { userId } or a plain id
+            const userId = result?.userId ?? result?.id ?? result;
 
             if (!userId) {
                 setError('Login succeeded, but no user id was returned.');
                 return;
             }
 
-            login(String(userId), rememberMe);
+            login(String(userId));
             navigate('/');
         } catch (err) {
             const message =
@@ -79,15 +76,15 @@ function LoginPage() {
         <section className="login-section" aria-labelledby="login-title">
             <div className="main-inner-content-wrap">
                 <div className="login-title-wrap">
+                    <h2 id="login-title" className="sr-only">Login</h2>
                 </div>
                 <div className="login-grid">
-                    <div className="login-grid-wrap" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div className="login-grid-wrap center">
                         <div className="login-content-item">
                             <div className="login-content-item-wrap">
                                 <form
                                     className={`login-form ${isSubmitting ? 'loading' : ''}`}
                                     onSubmit={onSubmit}
-                                    autoComplete="off"
                                 >
                                     <div className={`form-row required ${fieldErrors.email ? 'error-fld' : ''}`}>
                                         <label htmlFor="email" className="label-form-fld">E-mail</label>
@@ -125,17 +122,6 @@ function LoginPage() {
                                         )}
                                     </div>
 
-                                    <div className="form-row row-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            className="form-fld"
-                                            id="data-save"
-                                            name="data-save"
-                                            checked={rememberMe}
-                                            onChange={(e) => setRememberMe(e.target.checked)}
-                                        />
-                                        <label htmlFor="data-save" className="label-form-fld">Remember me</label>
-                                    </div>
 
                                     {error && (
                                         <div className="form-row">
