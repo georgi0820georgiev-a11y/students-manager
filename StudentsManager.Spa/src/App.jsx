@@ -9,6 +9,7 @@ import SlidoPage from './pages/SlidoPage';
 import ChatbotPage from './pages/ChatbotPage';
 import ChatbotResultsPage from './pages/ChatbotResultsPage';
 import QuizPage from './pages/QuizPage';
+import UserlessPage from './pages/UserlessPage';
 
 function App() {
   const { isLoggedIn } = useAuth();
@@ -19,6 +20,7 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path='/slido' element={<SlidoPage />} />
         <Route path='/quiz' element={<QuizPage />} />
+        <Route path='/userless' element={<UserlessPage />} />
         {isLoggedIn ? (
           <>
             <Route path='/profile' element={<ProfilePage />} />
