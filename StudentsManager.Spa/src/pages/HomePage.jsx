@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import robotImage from '../assets/home/robot.png';
 import './HomePage.css';
 
-// 1. Изваждаме AnimatedNumber извън основния компонент за по-добра производителност
 const AnimatedNumber = ({ value, duration = 2000 }) => {
     const [count, setCount] = useState(0);
     useEffect(() => {
@@ -24,10 +23,8 @@ const AnimatedNumber = ({ value, duration = 2000 }) => {
 
 function HomePage() {
     const canvasRef = useRef(null);
-    // Поправка: Използваме само useState, тъй като вече е импортнат
     const [timeLeft, setTimeLeft] = useState('');
 
-    // Matrix Rain Ефект
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
@@ -66,7 +63,6 @@ function HomePage() {
         };
     }, []);
 
-    // Daily Challenge Таймер
     useEffect(() => {
         const calculateTimeLeft = () => {
             const now = new Date();

@@ -9,7 +9,6 @@
     --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-/* Глобални настройки за контейнера */
 .hp-container {
     position: relative;
     color: white;
@@ -19,7 +18,6 @@
     min-height: 100vh;
 }
 
-/* Matrix Ефект (Background) */
 .matrix-canvas {
     position: fixed;
     top: 0;
@@ -29,7 +27,6 @@
     pointer-events: none;
 }
 
-/* Общи настройки за секциите */
 .hp-section, .hp-hero, .hp-cta {
     position: relative;
     z-index: 1;
@@ -37,7 +34,6 @@
     box-sizing: border-box;
 }
 
-/* Типография */
 .hero-title, .section-title, .glass-card h2 {
     font-family: var(--primary-font);
     text-transform: uppercase;
@@ -45,7 +41,6 @@
     font-weight: 900;
 }
 
-/* 1. Hero Section */
 .hp-hero {
     height: 100vh;
     display: flex;
@@ -101,7 +96,7 @@
     width: 40%;
     flex: 1;
     display: flex;
-    justify-content: flex-end; /* Залепва изображението вдясно на контейнера */
+    justify-content: flex-end;
     align-self: flex-end;
 }
 
@@ -113,7 +108,6 @@
     filter: drop-shadow(0 0 30px rgba(95, 177, 168, 0.3));
 }
 
-/* 2. Dashboard & Glassmorphism */
 .section-title {
     font-size: clamp(1.8rem, 4vw, 2.8rem);
     margin-bottom: 40px;
@@ -154,7 +148,6 @@
     box-shadow: 0 0 15px var(--matrix-color);
 }
 
-/* 4. Daily Challenge */
 .challenge-box {
     background: rgba(95, 177, 168, 0.05);
     border: 1px solid var(--matrix-color);
@@ -175,7 +168,6 @@
     border-left: 3px solid var(--matrix-color);
 }
 
-/* Buttons */
 .hp-btn, .cta-main-btn, .hp-link-btn {
     font-family: var(--primary-font);
     text-transform: uppercase;
@@ -222,7 +214,6 @@
     box-shadow: 0 10px 30px rgba(95, 177, 168, 0.4);
 }
 
-/* Animations */
 @keyframes slideInRight {
     from { transform: translateX(50px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
@@ -233,14 +224,12 @@
     50% { transform: translateY(-15px); }
 }
 
-/* Final CTA */
 .hp-cta {
     text-align: center;
     padding: 120px 10%;
     background: linear-gradient(to top, rgba(95, 177, 168, 0.15), transparent);
 }
 
-/* Daily Challenge - Mac Terminal Style */
 .mac-terminal {
     background: #0d0d0d;
     border-radius: 12px;
@@ -287,7 +276,7 @@
 
 .terminal-body {
     padding: 40px;
-    text-align: left; /* Терминалът изглежда по-добре подравнен вляво */
+    text-align: left;
 }
 
 .challenge-title {
@@ -303,7 +292,6 @@
     font-size: 1rem;
 }
 
-/* Кодът вътре */
 .code-container {
     background: #050505;
     border-radius: 8px;
@@ -320,9 +308,8 @@
     white-space: pre;
 }
 
-/* Бутонът SOLVE */
 .solve-btn {
-    font-family: var(--primary-font); /* Техничен шрифт */
+    font-family: var(--primary-font);
     background: transparent;
     border: 1px solid var(--matrix-color);
     color: var(--matrix-color);
@@ -339,9 +326,8 @@
     min-width: 220px;
 }
 
-/* Регулиране на бутона, за да не е твърде широк */
 .solve-btn {
-    margin: 0; /* Премахваме автоматични маргини ако има */
+    margin: 0;
     min-width: 220px;
 }
 
@@ -359,7 +345,7 @@
 
 .terminal-actions {
     display: flex;
-    justify-content: space-between; /* Разделя таймера вляво и бутона вдясно */
+    justify-content: space-between;
     align-items: center;
     margin-top: 20px;
     padding-top: 20px;
@@ -387,7 +373,6 @@
     font-weight: 500;
 }
 
-/* Achievements Section */
 .achievements-section {
     padding-bottom: 50px;
 }
@@ -405,7 +390,7 @@
     padding: 40px 20px;
     border-radius: 20px;
     position: relative;
-    overflow: hidden; /* За да не излиза зарята извън картата твърде много */
+    overflow: hidden;
     transition: transform 0.3s ease;
     text-align: center;
 }
@@ -450,7 +435,6 @@
     border-radius: 5px;
 }
 
-/* FIREWORKS EFFECT (Заря) */
 .firework-container {
     position: absolute;
     top: 0;
@@ -507,7 +491,6 @@
 }
 
 .timeline-btn {
-    /* Наследява основните стилове на hp-btn, които дефинирахме по-рано */
     padding: 16px 45px;
     font-size: 1.1rem;
     letter-spacing: 3px;
@@ -525,7 +508,6 @@
     transform: scale(1.1) translateY(-5px);
 }
 
-/* Добавяме лек пулсиращ ефект, за да подскажем, че е за бъдеща страница */
 .timeline-btn::after {
     position: absolute;
     top: -25px;
@@ -544,7 +526,6 @@
     top: -35px;
 }
 
-/* Engine Zone - New Styles */
 .engine-zone {
     padding: 100px 10%;
     position: relative;
@@ -578,7 +559,6 @@
 }
 
 .engine-box {
-    /* Твърд цвят за фон, за да не излиза бяло */
     background: #0a0a0a !important; 
     border: 1px solid rgba(95, 177, 168, 0.3);
     padding: 30px;
@@ -651,7 +631,6 @@
     font-style: italic;
 }
 
-/* Tooltip */
 .engine-box::after {
     content: attr(data-tooltip);
     position: absolute;
