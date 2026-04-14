@@ -1,10 +1,33 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import robotImage from '../assets/home/robot.png';
 import './HomePage.css';
 
+// 1. Изваждаме AnimatedNumber извън основния компонент за по-добра производителност
+const AnimatedNumber = ({ value, duration = 2000 }) => {
+    const [count, setCount] = useState(0);
+    useEffect(() => {
+        let start = 0;
+        const end = parseInt(value);
+        if (start === end) return;
+
+        let totalMilisecondsStep = Math.abs(Math.floor(duration / end));
+        let timer = setInterval(() => {
+            start += 1;
+            setCount(start);
+            if (start === end) clearInterval(timer);
+        }, totalMilisecondsStep);
+
+        return () => clearInterval(timer);
+    }, [value, duration]);
+    return <>{count}</>;
+};
+
 function HomePage() {
     const canvasRef = useRef(null);
+    // Поправка: Използваме само useState, тъй като вече е импортнат
+    const [timeLeft, setTimeLeft] = useState('');
 
+    // Matrix Rain Ефект
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
@@ -30,25 +53,31 @@ function HomePage() {
             }
         };
         const interval = setInterval(draw, 35);
-        return () => clearInterval(interval);
+
+        const handleResize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
-    const [timeLeft, setTimeLeft] = React.useState('');
-
+    // Daily Challenge Таймер
     useEffect(() => {
         const calculateTimeLeft = () => {
             const now = new Date();
-            // Краят на деня (24:00:00)
             const midnight = new Date();
             midnight.setHours(24, 0, 0, 0);
 
             const diff = midnight - now;
-
             const h = Math.floor(diff / (1000 * 60 * 60));
             const m = Math.floor((diff / (1000 * 60)) % 60);
             const s = Math.floor((diff / 1000) % 60);
 
-            // Форматиране с водеща нула (03:14:05)
             return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         };
 
@@ -63,6 +92,7 @@ function HomePage() {
         <div className="hp-container">
             <canvas ref={canvasRef} className="matrix-canvas"></canvas>
 
+            {/* Hero Section */}
             <section className="hp-hero">
                 <div className="hero-content">
                     <h1 className="hero-title">Welcome <br /><span>Heidelberg Materials</span></h1>
@@ -73,30 +103,63 @@ function HomePage() {
                 </div>
             </section>
 
-            <section className="hp-section">
-                <h2 className="section-title">Your learning engine</h2>
-                <div className="stats-grid">
-                    <div className="stat-card">
-                        <span>Completed Tasks</span>
-                        <div className="progress-bar"><div className="progress-fill" style={{ width: '75%' }}></div></div>
-                        <span className="stat-val">75%</span>
+            <section className="hp-section engine-zone">
+                <div className="zone-header">
+                    <h2 className="zone-title">Learning Core v2.0</h2>
+                    <p className="zone-sub">Real-time neural progress tracking</p>
+                </div>
+
+                <div className="engine-grid">
+                    {/* Box 1 */}
+                    <div className="engine-box" data-tooltip="12 tasks solved this week">
+                        <div className="box-top">
+                            <span className="box-label">Algorithm Mastery</span>
+                            <span className="box-percent"><AnimatedNumber value="75" />%</span>
+                        </div>
+                        <div className="box-bar">
+                            <div className="box-fill" style={{ '--target-width': '75%' }}></div>
+                        </div>
+                        <div className="box-bottom">
+                            <span className="box-context">15 tasks completed this week</span>
+                            <span className="box-goal">Next: reach 80% to unlock "Coder" badge</span>
+                        </div>
                     </div>
-                    <div className="stat-card">
-                        <span>System Accuracy</span>
-                        <div className="progress-bar"><div className="progress-fill" style={{ width: '92%' }}></div></div>
-                        <span className="stat-val">92%</span>
+
+                    {/* Box 2 */}
+                    <div className="engine-box" data-tooltip="Accuracy up by +5%">
+                        <div className="box-top">
+                            <span className="box-label">Logic Precision</span>
+                            <span className="box-percent"><AnimatedNumber value="92" />%</span>
+                        </div>
+                        <div className="box-bar">
+                            <div className="box-fill highlight" style={{ '--target-width': '92%' }}></div>
+                        </div>
+                        <div className="box-bottom">
+                            <span className="box-context">Top 10% global accuracy</span>
+                            <span className="box-goal">Target: 95% for "Flawless" status</span>
+                        </div>
                     </div>
-                    <div className="stat-card">
-                        <span>Rank Status</span>
-                        <div className="progress-bar"><div className="progress-fill" style={{ width: '60%' }}></div></div>
-                        <span className="stat-val">Advanced</span>
+
+                    {/* Box 3 */}
+                    <div className="engine-box" data-tooltip="Active 5-day streak!">
+                        <div className="box-top">
+                            <span className="box-label">Total Uptime</span>
+                            <span className="box-percent"><AnimatedNumber value="124" />h</span>
+                        </div>
+                        <div className="box-bar">
+                            <div className="box-fill gold" style={{ '--target-width': '65%' }}></div>
+                        </div>
+                        <div className="box-bottom">
+                            <span className="box-context">Top 5% of this month</span>
+                            <span className="box-goal">3h more to reach "Senior" level</span>
+                        </div>
                     </div>
                 </div>
             </section>
 
+            {/* Daily Challenge Section */}
             <section className="hp-section daily-challenge">
                 <div className="mac-terminal">
-                    {/* Header-а на прозореца */}
                     <div className="terminal-header">
                         <div className="terminal-buttons">
                             <span className="dot red"></span>
@@ -106,7 +169,6 @@ function HomePage() {
                         <div className="terminal-title">daily_challenge.js</div>
                     </div>
 
-                    {/* Съдържанието */}
                     <div className="terminal-body">
                         <h2 className="challenge-title">Today's Mission</h2>
                         <p className="challenge-desc">Write a function to find the first non-repeating character in a string.</p>
@@ -131,10 +193,10 @@ function HomePage() {
                 </div>
             </section>
 
+            {/* Wall of Fame Section */}
             <section className="hp-section achievements-section">
                 <h2 className="section-title">Wall of Fame</h2>
                 <div className="achievements-grid">
-                    {/* Картичка 1: Quiz Master */}
                     <div className="achievement-card">
                         <div className="firework-container">
                             <div className="firework"></div>
@@ -150,7 +212,6 @@ function HomePage() {
                         </div>
                     </div>
 
-                    {/* Картичка 2: Bot Whisperer */}
                     <div className="achievement-card">
                         <div className="firework-container">
                             <div className="firework"></div>
@@ -166,7 +227,6 @@ function HomePage() {
                         </div>
                     </div>
 
-                    {/* Картичка 3: Logic Architect */}
                     <div className="achievement-card">
                         <div className="firework-container">
                             <div className="firework"></div>
@@ -182,9 +242,13 @@ function HomePage() {
                         </div>
                     </div>
                 </div>
+                <div className="achievements-actions">
+                    <button className="hp-btn timeline-btn">View Full Timeline</button>
+                </div>
             </section>
 
-            <section className="hp-cta">
+            {/* Final CTA */}
+            <section className="hp-section hp-cta">
                 <h2 className="hero-title" style={{ textAlign: 'center', fontSize: '3rem' }}>Ready to initialize?</h2>
                 <button className="cta-main-btn">ACCESS CORE SYSTEM</button>
             </section>
