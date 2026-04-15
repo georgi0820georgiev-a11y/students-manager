@@ -160,7 +160,6 @@
 .challenge-snippet {
     display: block;
     font-family: var(--mono-font);
-    color: var(--matrix-color);
     background: #0d0d0d;
     padding: 25px;
     border-radius: 12px;
