@@ -160,12 +160,15 @@
 .challenge-snippet {
     display: block;
     font-family: var(--mono-font);
+    color: var(--matrix-color);
     background: #0d0d0d;
     padding: 25px;
     border-radius: 12px;
     margin: 25px 0;
     color: var(--matrix-color);
     border-left: 3px solid var(--matrix-color);
+    line-height: 1.6;
+    white-space: pre;
 }
 
 .hp-btn, .cta-main-btn, .hp-link-btn {
@@ -300,14 +303,6 @@
     border: 1px solid #1a1a1a;
 }
 
-.challenge-snippet {
-    display: block;
-    color: var(--matrix-color);
-    font-family: var(--mono-font);
-    line-height: 1.6;
-    white-space: pre;
-}
-
 .solve-btn {
     font-family: var(--primary-font);
     background: transparent;
@@ -322,11 +317,6 @@
     text-transform: uppercase;
     position: relative;
     overflow: hidden;
-    margin: 0;
-    min-width: 220px;
-}
-
-.solve-btn {
     margin: 0;
     min-width: 220px;
 }
