@@ -11,7 +11,7 @@ import { useAuth } from '../../context/AuthContext';
 const WELCOME_MESSAGE = {
     role: 'assistant',
     content:
-        'Здравей! Аз съм #Robo — твоят AI асистент. ' +
+        'Здравей! Аз съм #Robo 🤖 — твоят AI асистент. ' +
         'Мога да те насоча в обучението ти по хибридни мобилни приложения. ' +
         'Как мога да ти помогна днес?',
 };
@@ -29,9 +29,9 @@ export function useChatbot() {
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
+    // Load prior examination answers on mount
     useEffect(() => {
         if (!userId) return;
-
         getExaminationAnswers(userId)
             .then((data) => {
                 if (data && data.length > 0) {
@@ -39,12 +39,15 @@ export function useChatbot() {
                 }
             })
             .catch(() => {
+                // Non-critical
             });
     }, [userId]);
 
+    // Auto-scroll
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, isLoading]);
+
     const sendMessage = useCallback(async (text) => {
         const trimmed = (text ?? inputValue).trim();
         if (!trimmed || isLoading) return;
@@ -54,48 +57,59 @@ export function useChatbot() {
         setSessionSaved(false);
 
         const userMsg = { role: 'user', content: trimmed };
-        const updatedMessages = [...messages, userMsg];
-        setMessages(updatedMessages);
 
-        setIsLoading(true);
+        // FIX: use functional update to avoid stale state reference
+        setMessages((prev) => {
+            const updatedMessages = [...prev, userMsg];
 
-        try {
-            const payload = buildChatPayload(userId, updatedMessages, examinationContext);
-            const { reply, sessionId } = await sendChatMessage(payload);
-
-            const assistantMsg = { role: 'assistant', content: reply };
-            const finalMessages = [...updatedMessages, assistantMsg];
-            setMessages(finalMessages);
-            if (userId) {
+            // Trigger async after state update
+            (async () => {
+                setIsLoading(true);
                 try {
-                    await submitChatbotAnswers({
-                        userId,
-                        sessionId: sessionId ?? `session_${Date.now()}`,
-                        messages: finalMessages,
-                        timestamp: new Date().toISOString(),
-                    });
-                    setSessionSaved(true);
-                    await logEvent(userId, 'chatbot-message', {
-                        userMessage: trimmed,
-                        assistantReply: reply,
-                        messageCount: finalMessages.length,
-                    });
-                } catch (persistErr) {
-                    console.warn('Failed to persist chat session:', persistErr);
+                    const payload = buildChatPayload(userId, updatedMessages, examinationContext);
+                    const { reply, sessionId } = await sendChatMessage(payload);
+
+                    const assistantMsg = { role: 'assistant', content: reply };
+                    const finalMessages = [...updatedMessages, assistantMsg];
+
+                    setMessages(finalMessages);
+
+                    if (userId) {
+                        try {
+                            await submitChatbotAnswers({
+                                userId,
+                                sessionId: sessionId ?? `session_${Date.now()}`,
+                                messages: finalMessages,
+                                timestamp: new Date().toISOString(),
+                            });
+                            setSessionSaved(true);
+
+                            await logEvent(userId, 'chatbot-message', {
+                                userMessage: trimmed,
+                                assistantReply: reply,
+                                messageCount: finalMessages.length,
+                            });
+                        } catch (persistErr) {
+                            console.warn('Failed to persist chat session:', persistErr);
+                        }
+                    }
+                } catch (err) {
+                    console.error('Chat error:', err);
+                    setError(
+                        err?.response?.data?.message ||
+                        'Възникна грешка при свързването с AI асистента. Моля, опитай отново.'
+                    );
+                    // Rollback — remove the user message that failed
+                    setMessages((current) => current.filter((m) => m !== userMsg));
+                } finally {
+                    setIsLoading(false);
+                    inputRef.current?.focus();
                 }
-            }
-        } catch (err) {
-            console.error('Chat error:', err);
-            setError(
-                err?.response?.data?.message ||
-                'Възникна грешка при свързването с AI асистента. Моля, опитай отново.'
-            );
-            setMessages(messages);
-        } finally {
-            setIsLoading(false);
-            inputRef.current?.focus();
-        }
-    }, [inputValue, isLoading, messages, userId, examinationContext]);
+            })();
+
+            return updatedMessages;
+        });
+    }, [inputValue, isLoading, userId, examinationContext]);
 
     const handleKeyDown = useCallback((e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
