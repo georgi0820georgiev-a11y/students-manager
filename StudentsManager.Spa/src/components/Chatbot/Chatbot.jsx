@@ -24,18 +24,16 @@ function Chatbot() {
     return (
         <div className="soge-young-chatbot chatbot-container">
 
-            {/* Context banner */}
             {examinationContext && (
-                <div className="chatbot-context-banner" role="status">
+                <output className="chatbot-context-banner">
                     <span className="chatbot-context-icon" aria-hidden="true">📋</span>
                     <span>
                         Заредени са твоите предишни отговори от изпита —
                         AI асистентът може да ги използва като контекст.
                     </span>
-                </div>
+                </output>
             )}
 
-            {/* Guest notice */}
             {!isLoggedIn && (
                 <div className="chatbot-guest-notice" role="alert">
                     <span>
@@ -45,23 +43,21 @@ function Chatbot() {
                 </div>
             )}
 
-            {/* Messages area */}
             <div
                 className="chatbot-messages"
                 role="log"
                 aria-label="Разговор с AI асистент"
                 aria-live="polite"
             >
-                {messages.map((msg) => (
+                {messages.map((msg, idx) => (
                     <ChatMessage
-                        key={`${msg.role}-${msg.content.slice(0, 16)}-${messages.indexOf(msg)}`}
+                        key={`${msg.role}-${idx}`}
                         role={msg.role}
                         content={msg.content}
-                        isLatest={messages.indexOf(msg) === messages.length - 1}
+                        isLatest={idx === messages.length - 1}
                     />
                 ))}
 
-                {/* Typing indicator */}
                 {isLoading && (
                     <div className="chatbot-typing" aria-label="Асистентът пише...">
                         <span className="chatbot-typing__dot" />
@@ -70,7 +66,6 @@ function Chatbot() {
                     </div>
                 )}
 
-                {/* Error */}
                 {error && (
                     <div className="chatbot-error" role="alert">
                         <span className="chatbot-error__icon" aria-hidden="true">⚠️</span>
@@ -78,17 +73,15 @@ function Chatbot() {
                     </div>
                 )}
 
-                {/* Saved */}
                 {sessionSaved && !isLoading && (
-                    <div className="chatbot-saved" role="status" aria-live="polite">
+                    <output className="chatbot-saved" aria-live="polite">
                         ✓ Разговорът е записан
-                    </div>
+                    </output>
                 )}
 
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
             <ChatInput
                 value={inputValue}
                 onChange={setInputValue}
@@ -98,7 +91,6 @@ function Chatbot() {
                 inputRef={inputRef}
             />
 
-            {/* Footer */}
             <div className="chatbot-footer">
                 <button
                     type="button"
