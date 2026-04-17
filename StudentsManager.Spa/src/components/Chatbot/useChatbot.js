@@ -29,7 +29,6 @@ export function useChatbot() {
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
-    // Load prior examination answers on mount
     useEffect(() => {
         if (!userId) return;
         getExaminationAnswers(userId)
@@ -41,12 +40,10 @@ export function useChatbot() {
             .catch(() => {});
     }, [userId]);
 
-    // Auto-scroll
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, isLoading]);
 
-    // ── Helper: persist session after successful AI reply ──────────────────
     const persistSession = useCallback(async (finalMessages, reply, trimmed) => {
         if (!userId) return;
         try {
@@ -67,46 +64,47 @@ export function useChatbot() {
         }
     }, [userId]);
 
-    // ── Helper: call AI and update messages ────────────────────────────────
     const callAI = useCallback(async (updatedMessages, trimmed) => {
         const payload = buildChatPayload(userId, updatedMessages, examinationContext);
         const { reply } = await sendChatMessage(payload);
-
         const assistantMsg = { role: 'assistant', content: reply };
         const finalMessages = [...updatedMessages, assistantMsg];
         setMessages(finalMessages);
-
         await persistSession(finalMessages, reply, trimmed);
     }, [userId, examinationContext, persistSession]);
 
-    // ── Send a message ─────────────────────────────────────────────────────
+    const handleSendError = useCallback((err, prevMessages) => {
+        console.error('Chat error:', err);
+        const errMsg =
+            err?.response?.data?.message ||
+            'Възникна грешка при свързването с AI асистента. Моля, опитай отново.';
+        setError(errMsg);
+        setMessages(prevMessages);
+    }, []);
+
     const sendMessage = useCallback(async (text) => {
         const trimmed = (text ?? inputValue).trim();
         if (!trimmed || isLoading) return;
 
+        const prevMessages = messages;
         setInputValue('');
         setError(null);
         setSessionSaved(false);
 
         const userMsg = { role: 'user', content: trimmed };
-        const updatedMessages = [...messages, userMsg];
+        const updatedMessages = [...prevMessages, userMsg];
         setMessages(updatedMessages);
         setIsLoading(true);
 
         try {
             await callAI(updatedMessages, trimmed);
         } catch (err) {
-            console.error('Chat error:', err);
-            setError(
-                err?.response?.data?.message ||
-                'Възникна грешка при свързването с AI асистента. Моля, опитай отново.'
-            );
-            setMessages(messages);
+            handleSendError(err, prevMessages);
         } finally {
             setIsLoading(false);
             inputRef.current?.focus();
         }
-    }, [inputValue, isLoading, messages, callAI]);
+    }, [inputValue, isLoading, messages, callAI, handleSendError]);
 
     const handleKeyDown = useCallback((e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -120,7 +118,6 @@ export function useChatbot() {
         setInputValue('');
         setError(null);
         setSessionSaved(false);
-
         if (userId) {
             logEvent(userId, 'chatbot-reset', {
                 timestamp: new Date().toISOString(),
