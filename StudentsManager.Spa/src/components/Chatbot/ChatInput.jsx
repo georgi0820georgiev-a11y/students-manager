@@ -1,7 +1,5 @@
-/**
- * ChatInput — text input + send button for the chatbot.
- * Uses existing soge-btn & soge-input styling.
- */
+import PropTypes from 'prop-types';
+
 function ChatInput({ value, onChange, onSend, onKeyDown, isLoading, inputRef }) {
     return (
         <div className="chatbot-input-area">
@@ -40,5 +38,21 @@ function ChatInput({ value, onChange, onSend, onKeyDown, isLoading, inputRef }) 
         </div>
     );
 }
+
+ChatInput.propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onSend: PropTypes.func.isRequired,
+    onKeyDown: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    inputRef: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+    ]),
+};
+
+ChatInput.defaultProps = {
+    inputRef: null,
+};
 
 export default ChatInput;
