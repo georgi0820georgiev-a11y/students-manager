@@ -12,9 +12,12 @@
 .hp-container {
     position: relative;
     color: white;
-    font-family: var(--mono-font); 
+    font-family: var(--mono-font);
     background-color: #000;
-    overflow-x: hidden;
+    /* overflow-x: clip instead of hidden — the CSS spec forces overflow-y to
+       'auto' when one axis is 'hidden', silently creating a second scroll
+       container. 'clip' cuts content without that side effect. */
+    overflow-x: clip;
     min-height: 100vh;
 }
 
@@ -648,6 +651,7 @@
     opacity: 0;
     transform: translateY(32px);
     transition: opacity 0.65s ease, transform 0.65s ease;
+    will-change: transform, opacity;
 }
 
 .fade-in-section.is-visible {
@@ -732,35 +736,27 @@
 
 @media (max-width: 1024px) {
     .hp-hero {
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: row;
+        align-items: center;
         height: auto;
-        padding: 100px 8% 60px;
-        gap: 50px;
+        padding: 100px 6% 60px;
+        gap: 32px;
     }
 
     .hero-content {
-        align-items: center;
-        text-align: center;
-    }
-
-    .hero-title {
-        text-align: center;
-    }
-
-    .hero-title span::after {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .hero-subtitle {
-        text-align: center;
+        flex: 1;
+        text-align: left;
     }
 
     .robot-container {
-        width: 60%;
-        justify-content: center;
-        align-self: center;
+        flex-shrink: 0;
+        width: auto;
+        justify-content: flex-end;
+        align-self: flex-end;
+    }
+
+    .robot-anim {
+        max-width: 220px;
     }
 
     .features-grid {
@@ -787,42 +783,41 @@
 
 @media (max-width: 767px) {
     .hp-hero {
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
         height: auto;
-        padding: 90px 6% 50px;
-        gap: 40px;
+        padding: 80px 16px 40px;
+        gap: 16px;
     }
 
     .hero-content {
-        align-items: center;
-        text-align: center;
+        flex: 1 1 60%;
+        text-align: left;
+        min-width: 0;
     }
 
     .hero-title {
-        font-size: clamp(2.2rem, 10vw, 3.5rem);
-        text-align: center;
+        font-size: clamp(1.6rem, 7vw, 2.8rem);
+        text-align: left;
         line-height: 1.1;
     }
 
-    .hero-title span::after {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
     .hero-subtitle {
-        font-size: clamp(0.9rem, 3.5vw, 1.2rem);
-        text-align: center;
-        letter-spacing: 1px;
+        font-size: clamp(0.75rem, 2.8vw, 1rem);
+        text-align: left;
+        letter-spacing: 0.5px;
+        overflow-wrap: break-word;
     }
 
     .robot-container {
-        width: 80%;
-        justify-content: center;
-        align-self: center;
+        flex: 0 0 40%;
+        justify-content: flex-end;
+        align-self: flex-end;
+        width: auto;
     }
 
     .robot-anim {
-        max-width: 260px;
+        max-width: 140px;
     }
 
     .features-grid {

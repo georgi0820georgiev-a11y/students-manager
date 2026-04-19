@@ -131,6 +131,26 @@ function HomePage() {
     const [easterEgg, setEasterEgg] = useState(false);
     // useRef avoids re-renders on every keypress while still tracking sequence position
     const konamiIdxRef = useRef(0);
+    const easterEggTimerRef = useRef(null);
+
+    // Safety: clear both inline-style AND class-based overflow locks.
+    // index.css contains body.of-hidden, body.modal_show, and html.fp-enabled rules
+    // that are set by legacy scripts elsewhere in the app and survive a plain
+    // body.style.overflow = '' reset.
+    useEffect(() => {
+        document.body.style.overflow = '';
+        document.body.classList.remove('of-hidden', 'modal_show');
+        document.documentElement.classList.remove('of-hidden', 'modal_show', 'fp-enabled');
+        return () => {
+            document.body.style.overflow = '';
+            clearTimeout(easterEggTimerRef.current);
+        };
+    }, []);
+
+    // Lock body scroll while celebration overlay is visible; restore when it closes
+    useEffect(() => {
+        document.body.style.overflow = easterEgg ? 'hidden' : '';
+    }, [easterEgg]);
 
     // Matrix rain canvas
     useEffect(() => {
@@ -207,7 +227,9 @@ function HomePage() {
         return () => typed.destroy();
     }, []);
 
-    // Scroll-triggered fade-in via IntersectionObserver
+    // Scroll-triggered fade-in via IntersectionObserver.
+    // Deferred via requestIdleCallback (setTimeout fallback) so observer setup
+    // doesn't compete with initial paint and first-frame rendering.
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) =>
@@ -217,11 +239,24 @@ function HomePage() {
                         observer.unobserve(entry.target);
                     }
                 }),
-            { threshold: 0.12 }
+            { rootMargin: '-10% 0px', threshold: 0 }
         );
-        const sections = containerRef.current?.querySelectorAll('.fade-in-section');
-        sections?.forEach((el) => observer.observe(el));
-        return () => observer.disconnect();
+
+        const setup = () => {
+            const sections = containerRef.current?.querySelectorAll('.fade-in-section');
+            sections?.forEach((el) => observer.observe(el));
+        };
+
+        const idleId = 'requestIdleCallback' in window
+            ? requestIdleCallback(setup)
+            : setTimeout(setup, 0);
+
+        return () => {
+            observer.disconnect();
+            'requestIdleCallback' in window
+                ? cancelIdleCallback(idleId)
+                : clearTimeout(idleId);
+        };
     }, []);
 
     // Fetch real stats from API
@@ -276,8 +311,9 @@ function HomePage() {
             }
             const next = idx + 1;
             if (next === KONAMI_SEQUENCE.length) {
+                clearTimeout(easterEggTimerRef.current);
                 setEasterEgg(true);
-                setTimeout(() => setEasterEgg(false), 3200);
+                easterEggTimerRef.current = setTimeout(() => setEasterEgg(false), 3200);
                 konamiIdxRef.current = 0;
             } else {
                 konamiIdxRef.current = next;
