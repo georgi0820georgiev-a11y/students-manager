@@ -900,3 +900,249 @@
         text-align: center;
     }
 }
+
+/* ─── Skeleton / Shimmer Loading ────────────────────────────────────────────── */
+
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skel {
+    display: block;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #111 25%, #222 50%, #111 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+}
+
+.skel-label  { height: 12px; width: 55%; margin-bottom: 4px; }
+.skel-percent { height: 20px; width: 22%; }
+.skel-fill   { height: 100%; width: 55%; }
+.skel-text-lg { height: 10px; width: 78%; margin-bottom: 10px; }
+.skel-text-sm { height: 10px; width: 50%; }
+
+.skeleton-mode .box-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 15px;
+}
+
+.skeleton-mode .box-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+/* ─── Heidelberg Materials Section ──────────────────────────────────────────── */
+
+.heidelberg-section {
+    padding: 100px 10%;
+    position: relative;
+}
+
+.heidelberg-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(95, 177, 168, 0.04) 0%, transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.heidelberg-section .zone-header,
+.heidelberg-intro,
+.heidelberg-grid {
+    position: relative;
+    z-index: 1;
+}
+
+.heidelberg-intro {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 60px;
+    font-family: var(--mono-font);
+    color: #777;
+    font-size: 0.9rem;
+    line-height: 1.9;
+    letter-spacing: 0.3px;
+}
+
+.heidelberg-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+.heidelberg-card {
+    background: rgba(95, 177, 168, 0.03);
+    border: 1px solid rgba(95, 177, 168, 0.18);
+    border-radius: 18px;
+    padding: 40px 26px;
+    text-align: center;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    outline: none;
+    cursor: default;
+}
+
+.heidelberg-card:hover,
+.heidelberg-card:focus-visible {
+    transform: translateY(-7px);
+    border-color: var(--matrix-color);
+    box-shadow: 0 0 24px rgba(95, 177, 168, 0.14);
+    background: rgba(95, 177, 168, 0.06);
+}
+
+.heidelberg-emoji {
+    font-size: 2.6rem;
+    margin-bottom: 18px;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(95, 177, 168, 0.25));
+}
+
+.heidelberg-card-title {
+    font-family: var(--primary-font);
+    font-size: 0.88rem;
+    color: var(--matrix-color);
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 12px;
+}
+
+.heidelberg-card-desc {
+    font-family: var(--mono-font);
+    color: #6a6a6a;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ─── Easter Egg Overlay ─────────────────────────────────────────────────────── */
+
+.easter-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.90);
+    backdrop-filter: blur(10px);
+    animation: easterFadeIn 0.35s ease forwards;
+}
+
+@keyframes easterFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.easter-content {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    animation: easterBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes easterBounce {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+
+.easter-icon {
+    font-size: 5rem;
+    margin-bottom: 16px;
+    display: block;
+    animation: easterPulse 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes easterPulse {
+    from { transform: scale(1); }
+    to   { transform: scale(1.12); }
+}
+
+.easter-title {
+    font-family: var(--primary-font);
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    color: var(--matrix-color);
+    text-shadow: 0 0 35px rgba(95, 177, 168, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin-bottom: 10px;
+}
+
+.easter-subtitle {
+    font-family: var(--mono-font);
+    color: #ffffff;
+    font-size: 1.4rem;
+    letter-spacing: 4px;
+    margin: 0;
+    opacity: 0.85;
+}
+
+/* ─── Confetti ───────────────────────────────────────────────────────────────── */
+
+.confetti-container {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -20px;
+    left: var(--left);
+    width: var(--size);
+    height: calc(var(--size) * 1.6);
+    background: var(--color);
+    border-radius: 2px;
+    animation: confettiFall var(--duration) var(--delay) ease-in forwards;
+}
+
+@keyframes confettiFall {
+    0%  { transform: translateY(0)     rotate(0deg);   opacity: 1; }
+    80% { opacity: 1; }
+    100%{ transform: translateY(110vh) rotate(740deg); opacity: 0; }
+}
+
+/* ─── Responsive additions for new sections ──────────────────────────────────── */
+
+@media (max-width: 1024px) {
+    .heidelberg-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .heidelberg-section {
+        padding: 70px 8%;
+    }
+}
+
+@media (max-width: 767px) {
+    .heidelberg-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .heidelberg-section {
+        padding: 55px 6%;
+    }
+
+    .heidelberg-intro {
+        font-size: 0.85rem;
+        margin-bottom: 40px;
+    }
+
+    .easter-title {
+        font-size: clamp(1.4rem, 7vw, 2rem);
+        letter-spacing: 3px;
+    }
+
+    .easter-subtitle {
+        font-size: 1.1rem;
+    }
+}
