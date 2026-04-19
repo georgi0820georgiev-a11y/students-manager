@@ -4,9 +4,11 @@ import QuizProgress from './QuizProgress';
 import QuizQuestion from './QuizQuestion';
 import QuizResults from './QuizResults';
 import QuizReview from './QuizReview';
+import QuizStart from './QuizStart';
 
 function Quiz() {
     const {
+        quizStarted,
         shuffledQuestions,
         currentQuestionIndex,
         currentQuestion,
@@ -15,19 +17,38 @@ function Quiz() {
         isAnimating,
         quizCompleted,
         reviewMode,
-        score,
+        scoreDetails,
         feedbackState,
+        history,
+        historyLoading,
+        historyError,
         questionCardRef,
+        handleStart,
         handleAnswerClick,
         handleShowResults,
+        handleShowReview,
         handleRestart,
     } = useQuiz(quizQuestions);
+
+    if (!quizStarted) {
+        return (
+            <QuizStart
+                totalQuestions={shuffledQuestions.length}
+                onStart={handleStart}
+                history={history}
+                historyLoading={historyLoading}
+                historyError={historyError}
+            />
+        );
+    }
 
     if (quizCompleted) {
         return (
             <QuizResults
-                score={score}
+                scoreDetails={scoreDetails}
                 totalQuestions={shuffledQuestions.length}
+                answers={answers}
+                onReview={handleShowReview}
                 onRestart={handleRestart}
             />
         );
@@ -38,6 +59,7 @@ function Quiz() {
             <QuizReview
                 answers={answers}
                 onShowResults={handleShowResults}
+                onRestart={handleRestart}
             />
         );
     }

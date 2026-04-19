@@ -1,4 +1,4 @@
-function QuizReview({ answers, onShowResults }) {
+function QuizReview({ answers, onShowResults, onRestart }) {
     return (
         <div className="quiz-review">
             <h2 className="quiz-review__title">Преглед на отговорите</h2>
@@ -35,6 +35,13 @@ function QuizReview({ answers, onShowResults }) {
                 ))}
             </ol>
             <div className="quiz-review__footer">
+                <button
+                    type="button"
+                    className="soge-btn"
+                    onClick={onRestart}
+                >
+                    Нов опит
+                </button>
                 <button
                     type="button"
                     className="soge-btn soge-btn--primary"

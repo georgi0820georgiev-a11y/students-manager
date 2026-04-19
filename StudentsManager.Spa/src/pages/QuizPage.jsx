@@ -2,7 +2,7 @@ import Quiz from '../components/Quiz/Quiz';
 
 function QuizPage() {
     return (
-        <div className="chatbot-page">
+        <div className="quiz-page">
             <Quiz />
         </div>
     );

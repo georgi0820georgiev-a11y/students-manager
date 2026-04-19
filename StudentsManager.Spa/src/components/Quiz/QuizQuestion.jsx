@@ -10,33 +10,30 @@ function getOptionClass(optionId, selectedAnswer, feedbackState, correctAnswerId
 function QuizQuestion({ question, selectedAnswer, onAnswerClick, feedbackState, isAnimating }) {
     return (
         <div>
-            <p className="soge-question">{question.question}</p>
+            <p className="soge-question quiz-question__title">{question.question}</p>
             <div className="soge-answer">
                 <div className={`quiz-options-grid${isAnimating ? ' quiz-options-grid--locked' : ''}`}>
-                    {question.options.map((option) => (
+                    {question.options.map((option, index) => (
                         <div
                             key={option.id}
                             className={getOptionClass(option.id, selectedAnswer, feedbackState, question.correctAnswer)}
                         >
-                            <div
+                            <button
+                                type="button"
                                 className="quiz-option__inner"
-                                role="button"
-                                tabIndex={isAnimating ? -1 : 0}
-                                aria-label={option.text}
+                                disabled={isAnimating}
+                                aria-pressed={selectedAnswer === option.id}
                                 onClick={() => onAnswerClick(option.id)}
-                                onKeyDown={(e) => {
-                                    if (!isAnimating && (e.key === 'Enter' || e.key === ' ')) {
-                                        e.preventDefault();
-                                        onAnswerClick(option.id);
-                                    }
-                                }}
                             >
                                 <div className="quiz-option__content">
+                                    <span className="quiz-option__marker">
+                                        {String.fromCharCode(65 + index)}
+                                    </span>
                                     <div className="quiz-option__text">
                                         <span className="quiz-option__label">{option.text}</span>
                                     </div>
                                 </div>
-                            </div>
+                            </button>
                         </div>
                     ))}
                 </div>
