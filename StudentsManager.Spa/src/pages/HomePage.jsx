@@ -56,21 +56,21 @@ const FEATURES = [
     },
 ];
 
-const HEIDELBERG_CARDS = [
+const COMMUNITY_CARDS = [
     {
         emoji: '🌍',
-        title: 'Global Presence',
-        desc: 'Operations in 50+ countries across every major continent.',
+        title: 'Open Community',
+        desc: 'A welcoming space for learners of every background and skill level.',
     },
     {
-        emoji: '🏗️',
-        title: 'Engineering Excellence',
-        desc: '150+ years of innovation in building materials and construction.',
+        emoji: '🚀',
+        title: 'Learn by Doing',
+        desc: 'Hands-on challenges, real projects, and instant feedback to accelerate your growth.',
     },
     {
-        emoji: '🎓',
-        title: 'Education Focus',
-        desc: 'Proud partner with top universities and engineering institutions worldwide.',
+        emoji: '🤝',
+        title: 'Grow Together',
+        desc: 'Collaborate with peers, share knowledge, and level up as a team.',
     },
 ];
 
@@ -212,9 +212,9 @@ function HomePage() {
         if (!subtitleRef.current) return;
         const typed = new Typed(subtitleRef.current, {
             strings: [
-                'Elevating engineering through innovation and AI-driven logic.',
-                'Where data meets design, and curiosity meets code.',
-                'Your learning journey, supercharged by artificial intelligence.',
+                'Your learning hub — powered by AI, built for curious minds.',
+                'Track progress, solve challenges, and grow with your peers.',
+                'Everything you need to go from beginner to builder.',
             ],
             typeSpeed: 38,
             backSpeed: 18,
@@ -331,8 +331,8 @@ function HomePage() {
             <section className='hp-hero' aria-labelledby='hero-title'>
                 <div className='hero-content'>
                     <h1 className='hero-title' id='hero-title'>
-                        Welcome <br />
-                        <span>Heidelberg Materials</span>
+                        Welcome, <br />
+                        <span>Fellow Builders</span>
                     </h1>
                     <p className='hero-subtitle' ref={subtitleRef} aria-live='polite'></p>
                 </div>
@@ -350,7 +350,7 @@ function HomePage() {
                     <h2 className='zone-title' id='features-title'>
                         Platform Capabilities
                     </h2>
-                    <p className='zone-sub'>Everything you need to master the curriculum</p>
+                    <p className='zone-sub'>Everything you need to get started and keep going</p>
                 </div>
                 <div className='features-grid'>
                     {FEATURES.map(({ icon, title, desc }) => (
@@ -370,30 +370,29 @@ function HomePage() {
                 </div>
             </section>
 
-            {/* ── Heidelberg Materials Partnership ─────────────────────────── */}
+            {/* ── Our Community ──────────────────────────────────────────── */}
             <section
-                className='hp-section heidelberg-section fade-in-section'
-                aria-labelledby='heidelberg-title'
+                className='hp-section community-section fade-in-section'
+                aria-labelledby='community-title'
             >
                 <div className='zone-header'>
-                    <h2 className='zone-title' id='heidelberg-title'>
-                        Heidelberg Materials
+                    <h2 className='zone-title' id='community-title'>
+                        Our Community
                     </h2>
-                    <p className='zone-sub'>Powering Education with Heidelberg Materials</p>
+                    <p className='zone-sub'>Built by learners, for learners</p>
                 </div>
-                <p className='heidelberg-intro'>
-                    The University of Economics – Varna has partnered with Heidelberg Materials,
-                    one of the world's largest manufacturers of building materials, to bring
-                    real-world engineering challenges directly into the academic curriculum.
-                    This collaboration bridges theoretical knowledge with industry practice,
-                    giving students a competitive edge in a global market.
+                <p className='community-intro'>
+                    This platform is designed for folks who want to sharpen their skills,
+                    tackle real-world challenges, and grow alongside a supportive community.
+                    Whether you are just getting started or looking to level up, you will find
+                    the tools, resources, and people to help you succeed.
                 </p>
-                <div className='heidelberg-grid'>
-                    {HEIDELBERG_CARDS.map(({ emoji, title, desc }) => (
-                        <article className='heidelberg-card' key={title} tabIndex='0'>
-                            <span className='heidelberg-emoji' aria-hidden='true'>{emoji}</span>
-                            <h3 className='heidelberg-card-title'>{title}</h3>
-                            <p className='heidelberg-card-desc'>{desc}</p>
+                <div className='community-grid'>
+                    {COMMUNITY_CARDS.map(({ emoji, title, desc }) => (
+                        <article className='community-card' key={title} tabIndex='0'>
+                            <span className='community-emoji' aria-hidden='true'>{emoji}</span>
+                            <h3 className='community-card-title'>{title}</h3>
+                            <p className='community-card-desc'>{desc}</p>
                         </article>
                     ))}
                 </div>
@@ -445,7 +444,7 @@ function HomePage() {
                             </div>
                             <div className='box-bottom'>
                                 <span className='box-context'>{stats.masteryLabel}</span>
-                                <span className='box-goal'>Next: reach 80% to unlock "Coder" badge</span>
+                                <span className='box-goal'>Hit 80% to earn the "Coder" badge</span>
                             </div>
                         </div>
 
@@ -471,7 +470,7 @@ function HomePage() {
                             </div>
                             <div className='box-bottom'>
                                 <span className='box-context'>{stats.precisionLabel}</span>
-                                <span className='box-goal'>Target: 95% for "Flawless" status</span>
+                                <span className='box-goal'>Reach 95% for "Flawless" status</span>
                             </div>
                         </div>
 
@@ -497,7 +496,7 @@ function HomePage() {
                             </div>
                             <div className='box-bottom'>
                                 <span className='box-context'>{stats.uptimeLabel}</span>
-                                <span className='box-goal'>3h more to reach "Senior" level</span>
+                                <span className='box-goal'>Keep it up — "Senior" level is within reach</span>
                             </div>
                         </div>
                     </div>
@@ -612,10 +611,10 @@ function HomePage() {
             {/* ── Final CTA ─────────────────────────────────────────────────── */}
             <section className='hp-section hp-cta fade-in-section' aria-label='Call to action'>
                 <h2 className='hero-title' style={{ textAlign: 'center', fontSize: '3rem' }}>
-                    Ready to initialize?
+                    Ready to jump in?
                 </h2>
-                <button className='cta-main-btn' aria-label='Access the core system'>
-                    ACCESS CORE SYSTEM
+                <button className='cta-main-btn' aria-label='Get started now'>
+                    GET STARTED
                 </button>
             </section>
 
