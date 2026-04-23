@@ -1,17 +1,19 @@
 import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { SCORE_ANIM_DURATION } from './quizConstants';
+import { createEvent } from '../../services/eventsService';
+import { useAuth } from '../../context/AuthContext';
 
-function QuizResults({ scoreDetails, totalQuestions, answers, onReview, onRestart }) {
+function QuizResults({ score, totalQuestions, onRestart }) {
     const scoreDisplayRef = useRef(null);
-    const { correctCount, percentage, points, passed } = scoreDetails;
+    const hasLoggedEventRef = useRef(false);
+    const { userId } = useAuth();
 
     useEffect(() => {
-        if (!scoreDisplayRef.current) return undefined;
-
+        if (!scoreDisplayRef.current) return;
         const obj = { val: 0 };
         const tween = gsap.to(obj, {
-            val: percentage,
+            val: score,
             duration: SCORE_ANIM_DURATION,
             ease: 'power2.out',
             onUpdate: () => {
@@ -20,26 +22,40 @@ function QuizResults({ scoreDetails, totalQuestions, answers, onReview, onRestar
                 }
             },
         });
-
         return () => tween.kill();
-    }, [percentage]);
+    }, [score]);
+
+    useEffect(() => {
+        if (!userId || hasLoggedEventRef.current) return;
+        hasLoggedEventRef.current = true;
+
+        createEvent({
+            userId,
+            type: 'quiz',
+            data: {
+                score,
+                totalQuestions,
+                correct: Math.round((score / 100) * totalQuestions),
+            },
+        });
+    }, [score, totalQuestions, userId]);
 
     const scoreModifier =
-        percentage >= 75 ? 'quiz-results__score--high' :
-        percentage >= 50 ? 'quiz-results__score--mid' :
+        score >= 70 ? 'quiz-results__score--high' :
+        score >= 50 ? 'quiz-results__score--mid' :
         'quiz-results__score--low';
 
-    const resultMessage = passed
-        ? 'Машина!'
-        : points === 0.5
-            ? 'Има напредък, продължавай.'
-            : 'Нищо, другият път по-добре!';
+    const resultMessage =
+        score >= 70 ? 'Отлично представяне!' :
+        score >= 50 ? 'Добро представяне!' :
+        'Продължавайте да учите!';
+
+    const correctCount = Math.round((score / 100) * totalQuestions);
 
     return (
         <section className="quiz-results">
             <div className="quiz-results__card">
-                <span className="quiz-results__eyebrow">Резултат</span>
-                <h2>JavaScript & React тест</h2>
+                <h2>Вашият резултат</h2>
                 <p
                     ref={scoreDisplayRef}
                     className={`quiz-results__score ${scoreModifier}`}
@@ -47,36 +63,15 @@ function QuizResults({ scoreDetails, totalQuestions, answers, onReview, onRestar
                 >
                     0%
                 </p>
-                <div className="quiz-results__points">
-                    <strong>{points}</strong>
-                    <span>точки</span>
-                </div>
-                <p className="quiz-results__message">{resultMessage}</p>
-                <p className="quiz-results__meta">
-                    {correctCount} от {totalQuestions} верни отговора
-                </p>
-                <div className="quiz-results__summary">
-                    {answers.map((answer, index) => (
-                        <span
-                            key={answer.questionId}
-                            className={`quiz-results__summary-dot quiz-results__summary-dot--${answer.isCorrect ? 'correct' : 'incorrect'}`}
-                            title={`Въпрос ${index + 1}`}
-                            aria-label={`Въпрос ${index + 1}: ${answer.isCorrect ? 'верен' : 'грешен'}`}
-                        />
-                    ))}
-                </div>
-                <div className="quiz-results__actions">
-                    <button type="button" className="soge-btn" onClick={onReview}>
-                        Прегледай отговорите
-                    </button>
-                    <button
-                        type="button"
-                        className="soge-btn soge-btn--primary"
-                        onClick={onRestart}
-                    >
-                        Нов опит
-                    </button>
-                </div>
+                <p>{resultMessage}</p>
+                <p>{correctCount} от {totalQuestions} верни отговора</p>
+                <button
+                    type="button"
+                    className="soge-btn soge-btn--primary"
+                    onClick={onRestart}
+                >
+                    Започни отначало
+                </button>
             </div>
         </section>
     );

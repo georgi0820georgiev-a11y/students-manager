@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import gsap from 'gsap';
 import logo from '../../assets/icons/logo.svg';
 
 function Header() {
     const { isLoggedIn, logout } = useAuth();
+    const { isDarkTheme, toggleTheme } = useTheme();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolledDown, setIsScrolledDown] = useState(false);
 
@@ -118,6 +120,25 @@ function Header() {
     );
 
     const headerClassName = `header${isMobileMenuOpen ? ' active-mobile-menu' : ''}${isScrolledDown ? ' down-state' : ''}`;
+    const nextThemeLabel = isDarkTheme ? 'light' : 'dark';
+
+    const renderThemeToggle = (extraClassName = '') => (
+        <button
+            type="button"
+            className={`theme-toggle ${extraClassName}`.trim()}
+            onClick={toggleTheme}
+            aria-label={`Switch to ${nextThemeLabel} mode`}
+            aria-pressed={isDarkTheme}
+            title={`Switch to ${nextThemeLabel} mode`}
+        >
+            <span className="theme-toggle-track" aria-hidden="true">
+                <span className="theme-toggle-thumb" />
+            </span>
+            <span className="theme-toggle-label">
+                {isDarkTheme ? 'Dark' : 'Light'}
+            </span>
+        </button>
+    );
 
     return (
         <header ref={headerRef} className={headerClassName}>
@@ -130,22 +151,25 @@ function Header() {
                         </Link>
                     </div>
                     <div className="mobile-menu-container">
-                        <div className="mobile-menu-btn-wrap">
-                            <button
-                                ref={mobileMenuButtonRef}
-                                type="button"
-                                className={`menu-btn ${isMobileMenuOpen ? 'active' : ''}`}
-                                onClick={toggleMobileMenu}
-                                aria-label="Toggle menu"
-                                aria-expanded={isMobileMenuOpen}
-                                aria-controls="main-navigation"
-                            >
-                                <span className="lines-wrap">
-                                    <span className="line line1" />
-                                    <span className="line line2" />
-                                    <span className="line line3" />
-                                </span>
-                            </button>
+                        <div className="mobile-menu-controls">
+                            {renderThemeToggle('theme-toggle--mobile')}
+                            <div className="mobile-menu-btn-wrap">
+                                <button
+                                    ref={mobileMenuButtonRef}
+                                    type="button"
+                                    className={`menu-btn ${isMobileMenuOpen ? 'active' : ''}`}
+                                    onClick={toggleMobileMenu}
+                                    aria-label="Toggle menu"
+                                    aria-expanded={isMobileMenuOpen}
+                                    aria-controls="main-navigation"
+                                >
+                                    <span className="lines-wrap">
+                                        <span className="line line1" />
+                                        <span className="line line2" />
+                                        <span className="line line3" />
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,16 +243,19 @@ function Header() {
 
                         <div className="login-container" ref={assignMenuItemRef(4)}>
                             <div className="login-container-inner">
-                                <div className="login-btn-wrap">
-                                    {isLoggedIn ? (
-                                        <button type="button" className="login btn" onClick={handleLogout}>
-                                            Logout
-                                        </button>
-                                    ) : (
-                                        <Link to="/login" className="login btn" onClick={closeMobileMenu}>
-                                            Login
-                                        </Link>
-                                    )}
+                                <div className="header-actions">
+                                    {renderThemeToggle('theme-toggle--desktop')}
+                                    <div className="login-btn-wrap">
+                                        {isLoggedIn ? (
+                                            <button type="button" className="login btn" onClick={handleLogout}>
+                                                Logout
+                                            </button>
+                                        ) : (
+                                            <Link to="/login" className="login btn" onClick={closeMobileMenu}>
+                                                Login
+                                            </Link>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
